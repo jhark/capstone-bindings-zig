@@ -7,12 +7,12 @@ const Handle = cs.csh;
 pub const Iter = struct {
     handle: Handle,
     code: []const u8,
-    address: u64,
+    address_val: u64,
     insn: [*]Insn,
 
     // Consumes the iterator and goes to the next
     pub fn next(self: *Iter) ?*Insn {
-        if (cs.cs_disasm_iter(self.handle, @ptrCast(&self.code.ptr), @ptrCast(&self.code.len), &self.address, @ptrCast(self.insn))) {
+        if (cs.cs_disasm_iter(self.handle, @ptrCast(&self.code.ptr), @ptrCast(&self.code.len), &self.address_val, @ptrCast(self.insn))) {
             const ret = &self.insn[0];
             ret.normalizeStrings();
             return ret;
@@ -28,6 +28,6 @@ pub const Iter = struct {
 
     /// Returns the current address
     pub fn address(self: Iter) u64 {
-        return self.address;
+        return self.address_val;
     }
 };
